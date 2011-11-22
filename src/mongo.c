@@ -771,6 +771,8 @@ int mongo_find_one( mongo *conn, const char *ns, bson *query,
     mongo_cursor_set_query( cursor, query );
     mongo_cursor_set_fields( cursor, fields );
     mongo_cursor_set_limit( cursor, 1 );
+    // Always use slave OK.
+    mongo_cursor_set_options( cursor, MONGO_SLAVE_OK );
 
     if ( mongo_cursor_next( cursor ) == MONGO_OK ) {
         bson_init_size( out, bson_size( (bson *)&cursor->current ) );

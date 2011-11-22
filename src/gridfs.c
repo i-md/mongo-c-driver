@@ -350,7 +350,7 @@ void gridfs_remove_filename( gridfs *gfs, const char *filename ) {
     bson_init( &query );
     bson_append_string( &query, "filename", filename );
     bson_finish( &query );
-    files = mongo_find( gfs->client, gfs->files_ns, &query, NULL, 0, 0, 0 );
+    files = mongo_find( gfs->client, gfs->files_ns, &query, NULL, 0, 0, MONGO_SLAVE_OK );
     bson_destroy( &query );
 
     /* Remove each file and it's chunks from files named filename */
@@ -595,7 +595,7 @@ mongo_cursor *gridfile_get_chunks( gridfile *gfile, int start, int size ) {
     bson_finish( &command );
 
     cursor = mongo_find( gfile->gfs->client, gfile->gfs->chunks_ns,
-                         &command, NULL, size, 0, 0 );
+                         &command, NULL, size, 0, MONGO_SLAVE_OK );
 
     bson_destroy( &command );
     bson_destroy( &query );
